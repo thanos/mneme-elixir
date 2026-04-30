@@ -50,6 +50,15 @@ defmodule Mneme.MixProject do
   defp package do
     [
       name: "mneme",
+      files: [
+        "lib",
+        "native",
+        "mix.exs",
+        "README.md",
+        "LICENSE",
+        "CHANGELOG.md",
+        "VERSIONING.md"
+      ],
       licenses: ["MIT"],
       links: %{
         "GitHub" => "https://github.com/mneme-db/mneme-elixir",
