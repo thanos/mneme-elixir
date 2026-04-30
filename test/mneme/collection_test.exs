@@ -1,5 +1,6 @@
 defmodule Mneme.CollectionTest do
   use ExUnit.Case, async: true
+  @moduletag :scaffold
 
   alias Mneme.Collection
 

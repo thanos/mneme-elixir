@@ -2,8 +2,8 @@ defmodule Mneme.Collection do
   @moduledoc """
   Primary user-facing API for vector collections.
 
-  `Mneme.Collection` validates Elixir inputs and delegates native work to
-  `Mneme.Native`. This wrapper is intentionally strict so invalid inputs fail
+  `Mneme.Collection` validates Elixir inputs and delegates native work through
+  the internal native boundary. This wrapper is intentionally strict so invalid inputs fail
   early with `%Mneme.Error{}` values instead of reaching the native layer.
 
   A collection tracks four core attributes:
@@ -37,7 +37,7 @@ defmodule Mneme.Collection do
   defstruct [:ref, :name, :dimension, :metric]
 
   @type t :: %__MODULE__{
-          ref: Native.collection_ref(),
+          ref: reference(),
           name: String.t(),
           dimension: pos_integer(),
           metric: :cosine

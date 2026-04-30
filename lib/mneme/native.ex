@@ -90,6 +90,9 @@ defmodule Mneme.Native do
   end
 
   @doc false
+  # Contract note: this wrapper returns either {:ok, count} or {:error, %Mneme.Error{}}
+  # and should not surface ambiguous "0 + last_error" states from lower-level C ABI.
+  # The concrete NIF implementation must validate handles before calling count.
   @spec collection_count(collection_ref()) :: {:ok, non_neg_integer()} | {:error, Error.t()}
   def collection_count(ref) do
     with {:ok, state} <- fetch_stub_collection(ref) do
