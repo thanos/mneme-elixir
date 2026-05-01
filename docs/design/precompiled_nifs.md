@@ -14,6 +14,14 @@ use ZiglerPrecompiled,
   otp_app: :mneme,
   base_url: "https://github.com/mneme-db/mneme-elixir/releases/download/v#{version}",
   version: version,
+  targets: ~w(
+    aarch64-linux-gnu
+    aarch64-linux-musl
+    x86_64-linux-gnu
+    x86_64-linux-musl
+    aarch64-macos-none
+    x86_64-macos-none
+  ),
   force_build: System.get_env("MNEME_BUILD") in ["1", "true"],
   zig_code_path: Path.expand("../../native/mneme_nif.zig", __DIR__),
   nifs: [native_abi_version: 0]

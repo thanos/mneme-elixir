@@ -28,7 +28,9 @@ jobs:
           - { target: aarch64-macos-none, os: macos-14, zig_arch: aarch64-macos }
           - { target: x86_64-macos-none, os: macos-14, zig_arch: aarch64-macos }
           - { target: aarch64-linux-gnu, os: ubuntu-22.04, zig_arch: x86_64-linux }
+          - { target: aarch64-linux-musl, os: ubuntu-22.04, zig_arch: x86_64-linux }
           - { target: x86_64-linux-gnu, os: ubuntu-22.04, zig_arch: x86_64-linux }
+          - { target: x86_64-linux-musl, os: ubuntu-22.04, zig_arch: x86_64-linux }
 
     env:
       ELIXIR_VERSION: "1.18.3"
@@ -67,6 +69,46 @@ jobs:
 
       - name: Download Zig
         run: mix zig.get
+
+      - name: Set Zigler target triple (cross-compile)
+        shell: bash
+        run: |
+          case "${{ matrix.target }}" in
+            aarch64-linux-gnu)
+              echo "TARGET_ARCH=aarch64" >> "$GITHUB_ENV"
+              echo "TARGET_OS=linux" >> "$GITHUB_ENV"
+              echo "TARGET_ABI=gnu" >> "$GITHUB_ENV"
+              ;;
+            aarch64-linux-musl)
+              echo "TARGET_ARCH=aarch64" >> "$GITHUB_ENV"
+              echo "TARGET_OS=linux" >> "$GITHUB_ENV"
+              echo "TARGET_ABI=musl" >> "$GITHUB_ENV"
+              ;;
+            x86_64-linux-gnu)
+              echo "TARGET_ARCH=x86_64" >> "$GITHUB_ENV"
+              echo "TARGET_OS=linux" >> "$GITHUB_ENV"
+              echo "TARGET_ABI=gnu" >> "$GITHUB_ENV"
+              ;;
+            x86_64-linux-musl)
+              echo "TARGET_ARCH=x86_64" >> "$GITHUB_ENV"
+              echo "TARGET_OS=linux" >> "$GITHUB_ENV"
+              echo "TARGET_ABI=musl" >> "$GITHUB_ENV"
+              ;;
+            aarch64-macos-none)
+              echo "TARGET_ARCH=aarch64" >> "$GITHUB_ENV"
+              echo "TARGET_OS=darwin" >> "$GITHUB_ENV"
+              echo "TARGET_ABI=none" >> "$GITHUB_ENV"
+              ;;
+            x86_64-macos-none)
+              echo "TARGET_ARCH=x86_64" >> "$GITHUB_ENV"
+              echo "TARGET_OS=darwin" >> "$GITHUB_ENV"
+              echo "TARGET_ABI=none" >> "$GITHUB_ENV"
+              ;;
+            *)
+              echo "::error::Unknown matrix.target: ${{ matrix.target }}"
+              exit 1
+              ;;
+          esac
 
       - name: Compile NIF from source
         env:
@@ -169,10 +211,12 @@ jobs:
         run: mix zig.get
 
       - name: Compile NIF from source
+        env:
+          MIX_ENV: dev
         run: mix compile --warnings-as-errors
 
       - name: Generate checksum file from GitHub Release
-        run: mix zigler_precompiled.download Mneme.Native --all --print 2>/dev/null
+        run: mix zigler_precompiled.download Mneme.Native --all --print
 
       - name: Publish to Hex
         run: mix hex.publish --yes

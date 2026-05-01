@@ -3,6 +3,18 @@ defmodule Mneme.Native do
 
   version = Mix.Project.config()[:version]
 
+  # Must match `.github/workflows/precompiled-nifs.yml` matrix (and release assets).
+  # If this list is wider than CI-built targets, `mix zigler_precompiled.download --all`
+  # will 404 for missing triples (e.g. gnu vs musl).
+  nif_targets = ~w(
+    aarch64-linux-gnu
+    aarch64-linux-musl
+    x86_64-linux-gnu
+    x86_64-linux-musl
+    aarch64-macos-none
+    x86_64-macos-none
+  )
+
   precompiled_base_url =
     System.get_env(
       "MNEME_NIF_BASE_URL",
@@ -13,6 +25,7 @@ defmodule Mneme.Native do
     otp_app: :mneme,
     base_url: precompiled_base_url,
     version: version,
+    targets: nif_targets,
     force_build: Mix.env() != :prod or System.get_env("MNEME_BUILD") in ["1", "true"],
     zig_code_path: Path.expand("../../native/mneme_nif.zig", __DIR__),
     nifs: [native_abi_version: 0]
