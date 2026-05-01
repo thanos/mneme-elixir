@@ -76,7 +76,7 @@ jobs:
           fi
 
           BASENAME="Elixir.Mneme.Native"
-          NIF_DIR="_build/dev/lib/mneme/priv/lib"
+          NIF_DIR="_build/dev/lib/mnemedb_client/priv/lib"
 
           test -f "${NIF_DIR}/${BASENAME}.so" || {
             echo "::error::NIF not found at ${NIF_DIR}/${BASENAME}.so"
@@ -97,7 +97,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: Elixir.Mneme.Native-v${{ env.MIX_VERSION }}-${{ matrix.target }}
+          name: Elixir.Mneme.Native-${{ matrix.target }}
           path: "*.tar.gz"
           if-no-files-found: error
 
