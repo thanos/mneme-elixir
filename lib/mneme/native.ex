@@ -4,15 +4,16 @@ defmodule Mneme.Native do
   version = Mix.Project.config()[:version]
 
   # Keep in sync with `.github/workflows/precompiled-nifs.yml` matrix.
+  # Triples are arch-os-abi (e.g. aarch64-macos-none — "none" is the macOS ABI, not app version).
   nif_targets = ~w(
     aarch64-linux-gnu
-    aarch64-linux-musl
     x86_64-linux-gnu
-    x86_64-linux-musl
     aarch64-macos-none
     x86_64-macos-none
   )
 
+  # ZiglerPrecompiled (deps/zigler_precompiled): base_url must be .../releases/download/v<mix_version>
+  # (no trailing slash). Each asset is base_url <> "/" <> "#{basename}-v<mix_version>-<triple>.so.tar.gz".
   precompiled_base_url =
     System.get_env(
       "MNEME_NIF_BASE_URL",
