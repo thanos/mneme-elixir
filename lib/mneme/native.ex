@@ -3,9 +3,7 @@ defmodule Mneme.Native do
 
   version = Mix.Project.config()[:version]
 
-  # Must match `.github/workflows/precompiled-nifs.yml` matrix (and release assets).
-  # If this list is wider than CI-built targets, `mix zigler_precompiled.download --all`
-  # will 404 for missing triples (e.g. gnu vs musl).
+  # Keep in sync with `.github/workflows/precompiled-nifs.yml` matrix.
   nif_targets = ~w(
     aarch64-linux-gnu
     aarch64-linux-musl

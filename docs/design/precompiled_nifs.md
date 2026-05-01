@@ -37,12 +37,10 @@ Precompiled artifacts are intended to be downloaded and validated first, with lo
 4. Hex publish job runs `mix zigler_precompiled.download Mneme.Native --all --print`.
 5. Runtime prefers downloaded precompiled artifacts; local Zig build is fallback.
 
-Current target set:
+Current target set (matches CI matrix and `targets:` in the native module):
 
-- macOS arm64
-- macOS x86_64
-- Linux x86_64
-- Linux aarch64
+- Linux: `aarch64-linux-gnu`, `aarch64-linux-musl`, `x86_64-linux-gnu`, `x86_64-linux-musl`
+- macOS: `aarch64-macos-none`, `x86_64-macos-none`
 
 Later targets:
 
